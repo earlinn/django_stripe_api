@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from api.views import ItemDetail
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("item/<int:pk>/", ItemDetail.as_view()),
 ]
