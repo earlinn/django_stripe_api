@@ -1,9 +1,11 @@
 import os
 
 import stripe
+from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Item
+from django_stripe_api.settings import MODE
 
 stripe.api_key = os.getenv("STRIPE_TEST_KEY")
 
@@ -11,6 +13,10 @@ stripe.api_key = os.getenv("STRIPE_TEST_KEY")
 def buy(request, id):
     """Gets a Stripe Session Id to pay for the selected item."""
     item = get_object_or_404(Item, pk=id)
+    if MODE == "dev":
+        domain = get_current_site(request)
+    else:
+        domain = "localhost"
     session = stripe.checkout.Session.create(
         line_items=[
             {
@@ -26,8 +32,8 @@ def buy(request, id):
             }
         ],
         mode="payment",
-        success_url="http://127.0.0.1:8000/success",
-        cancel_url="http://127.0.0.1:8000/cancel",
+        success_url=f"http://{domain}/success",
+        cancel_url=f"http://{domain}/cancel",
     )
     return redirect(session.url)
 

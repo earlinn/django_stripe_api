@@ -1,5 +1,7 @@
 import os
 
+from .base import BASE_DIR
+
 DEBUG = False
 ALLOWED_HOSTS = [
     "web",
@@ -17,3 +19,4 @@ DATABASES = {
         "PORT": os.getenv("DB_PORT", default="5432"),
     }
 }
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
