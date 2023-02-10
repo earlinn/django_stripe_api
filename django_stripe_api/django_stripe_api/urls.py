@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from api.views import ItemDetail
+from api.views import ItemDetail, buy
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("buy/<int:id>/", buy),
     path("item/<int:pk>/", ItemDetail.as_view()),
 ]
