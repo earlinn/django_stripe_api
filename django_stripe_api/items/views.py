@@ -42,7 +42,16 @@ def buy(request, id):
 def item(request, id):
     """Shows info on a particular item and a buy button."""
     item = get_object_or_404(Item, pk=id)
-    """ customer = stripe.Customer.create(description="My First Test Customer")
+    context = {
+        "item": item,
+        "public_key": os.getenv("STRIPE_PUBLIC_KEY"),
+    }
+    return render(request, "item.html", context)
+
+
+def create_intent(request, id):
+    item = get_object_or_404(Item, pk=id)
+    customer = stripe.Customer.create(description="My First Test Customer")
     intent = stripe.PaymentIntent.create(
         amount=item.price,
         currency="usd",
@@ -53,13 +62,9 @@ def item(request, id):
             "item_name": item.name,
             "item_description": item.description,
         },
-    ) """
-    context = {
-        "item": item,
-        "public_key": os.getenv("STRIPE_PUBLIC_KEY"),
-        # "client_secret": intent["client_secret"],
-    }
-    return render(request, "item.html", context)
+    )
+    print(intent["id"])
+    return JsonResponse({"clientSecret": intent["client_secret"]})
 
 
 def success(request):
