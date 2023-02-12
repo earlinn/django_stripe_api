@@ -11,7 +11,7 @@ services:
       - ./.env
 
   web:
-    image: earlinn/django_stripe_api:v01
+    build: ../django_stripe_api
     volumes:
       - static_value:/app/static/
     restart: always
